@@ -18,3 +18,4 @@ void main() {
 // TODO: Add Position ✅
 // TODO: Add Relative Poistion ✅
 // TODO: Fix the text overlay when exporting 
+// TODO: When A New Text Is Added Make It Selected

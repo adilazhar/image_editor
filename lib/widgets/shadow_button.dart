@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class FontSizeButton extends StatelessWidget {
+class ShadowButton extends StatelessWidget {
   final bool isEnabled;
   final Function(String) onShowDialog;
 
-  const FontSizeButton(this.isEnabled, this.onShowDialog, {super.key});
+  const ShadowButton(this.isEnabled, this.onShowDialog, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: isEnabled
           ? () {
-              onShowDialog('fontSize');
+              onShowDialog('shadow');
             }
           : null,
-      child: const Icon(Icons.format_size),
+      child: const Icon(Icons.blur_on),
     );
   }
 }

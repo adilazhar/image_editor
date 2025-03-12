@@ -1,71 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_editor/providers/selected_text_color.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_editor/providers/text_info_controller.dart';
 
-class ColorButton extends ConsumerWidget {
-  const ColorButton(
-    this.isAnythingSelected, {
-    super.key,
-  });
+class ColorButton extends StatelessWidget {
+  final bool isEnabled;
 
-  final bool isAnythingSelected;
+  const ColorButton(this.isEnabled, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedTextColor = ref.watch(selectedTextColorProvider);
-    return OutlinedButton(
-      onPressed: isAnythingSelected
-          ? () {
-              _showColorPickerDialog(context, ref);
-            }
-          : null,
-      child: Icon(
-        Icons.color_lens_rounded,
-        color: isAnythingSelected ? selectedTextColor : null,
-      ),
-    );
-  }
-
-  Future<void> _showColorPickerDialog(
-      BuildContext context, WidgetRef ref) async {
-    Color selectedColor = ref.read(selectedTextColorProvider);
-
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Pick a color'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: selectedColor,
-              onColorChanged: (color) {
-                selectedColor = color;
-              },
-              pickerAreaHeightPercent: 0.8,
-              enableAlpha: true,
-              displayThumbColor: true,
-              paletteType: PaletteType.hsv,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                ref
-                    .read(textInfoControllerProvider.notifier)
-                    .changeColor(selectedColor);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, _) {
+        return OutlinedButton(
+          onPressed: isEnabled
+              ? () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Select Color'),
+                        content: SingleChildScrollView(
+                          child: ColorPicker(
+                            pickerColor: Colors.black,
+                            onColorChanged: (color) {
+                              ref
+                                  .read(textInfoControllerProvider.notifier)
+                                  .changeColor(color);
+                            },
+                            enableAlpha: true,
+                            hexInputBar: true,
+                            pickerAreaHeightPercent: 0.8,
+                            displayThumbColor: true,
+                            paletteType: PaletteType.hsv,
+                          ),
+                        ),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            child: const Text('Apply'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              : null,
+          child: const Icon(Icons.color_lens),
         );
       },
     );
