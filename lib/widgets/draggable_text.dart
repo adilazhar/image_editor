@@ -34,6 +34,7 @@ class DraggableTextState extends ConsumerState<DraggableText> {
     final isSelected = ref.watch(selectedTextIndexProvider.select(
       (value) => value == widget.index,
     ));
+
     return GestureDetector(
       onTapDown: (details) {
         ref.read(selectedTextIndexProvider.notifier).selectText(widget.index);
@@ -63,67 +64,96 @@ class DraggableTextState extends ConsumerState<DraggableText> {
               newPosition,
             );
       },
-      child: Stack(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(5),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isSelected ? Colors.blue : Colors.transparent,
-                width: 1.0,
+      child: Transform.rotate(
+        angle: widget.textInfo.rotation *
+            (3.14159265359 / 180), // Convert degrees to radians
+        child: Opacity(
+          opacity: widget.textInfo.opacity,
+          child: Stack(
+            children: [
+              Container(
+                margin: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(5),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: isSelected ? Colors.blue : Colors.transparent,
+                    width: 1.0,
+                  ),
+                ),
+                child: Container(
+                  decoration: widget.textInfo.hasBackground
+                      ? BoxDecoration(
+                          color: widget.textInfo.backgroundColor
+                              .withOpacity(widget.textInfo.opacity),
+                          borderRadius: BorderRadius.circular(
+                              widget.textInfo.backgroundBorderRadius),
+                        )
+                      : null,
+                  padding: widget.textInfo.hasBackground
+                      ? widget.textInfo.backgroundPadding
+                      : EdgeInsets.zero,
+                  child: Text(
+                    widget.textInfo.text,
+                    style: TextStyle(
+                      color: widget.textInfo.textColor,
+                      fontSize: widget.textInfo.fontSize,
+                      shadows: widget.textInfo.hasShadow
+                          ? [
+                              Shadow(
+                                color: widget.textInfo.shadowColor
+                                    .withOpacity(widget.textInfo.shadowOpacity),
+                                blurRadius: widget.textInfo.shadowBlurRadius,
+                                offset: widget.textInfo.shadowOffset,
+                              )
+                            ]
+                          : null,
+                      letterSpacing: widget.textInfo.letterSpacing,
+                      wordSpacing: widget.textInfo.wordSpacing,
+                      height: 1 + (widget.textInfo.lineSpacing / 100),
+                    ),
+                    textAlign: widget.textInfo.textAlign,
+                  ),
+                ),
               ),
-            ),
-            child: Text(
-              widget.textInfo.text,
-              style: TextStyle(
-                color: widget.textInfo.textColor,
-                fontSize: widget.textInfo.fontSize,
-              ),
-            ),
+              // Selection indicators
+              if (isSelected) ...[
+                const Positioned(
+                  top: 0,
+                  left: 0,
+                  child: CircleAvatar(
+                    radius: 5,
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+                const Positioned(
+                  top: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    radius: 5,
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+                const Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: CircleAvatar(
+                    radius: 5,
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+                const Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    radius: 5,
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+              ],
+            ],
           ),
-          // Top-left circle
-          if (isSelected)
-            const Positioned(
-              top: 0,
-              left: 0,
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.blue,
-              ),
-            ),
-          // Top-right circle
-          if (isSelected)
-            const Positioned(
-              top: 0,
-              right: 0,
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.blue,
-              ),
-            ),
-          // Bottom-left circle
-          if (isSelected)
-            const Positioned(
-              bottom: 0,
-              left: 0,
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.blue,
-              ),
-            ),
-          // Bottom-right circle
-          if (isSelected)
-            const Positioned(
-              bottom: 0,
-              right: 0,
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.blue,
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }
