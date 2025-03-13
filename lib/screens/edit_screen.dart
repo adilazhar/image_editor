@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:image_editor/widgets/alignment_button.dart';
+import 'package:image_editor/widgets/alignment_dialog.dart';
 import 'package:image_editor/widgets/background_button.dart';
 import 'package:image_editor/widgets/color_button.dart';
 import 'package:image_editor/widgets/delete_button.dart';
@@ -13,12 +14,17 @@ import 'package:image_editor/widgets/edit_button.dart';
 import 'package:image_editor/widgets/font_size_button.dart';
 import 'package:image_editor/widgets/font_size_dialog.dart';
 import 'package:image_editor/widgets/line_spacing_button.dart';
+import 'package:image_editor/widgets/line_spacing_dialog.dart';
 import 'package:image_editor/widgets/opacity_button.dart';
+import 'package:image_editor/widgets/opacity_dialog.dart';
 import 'package:image_editor/widgets/position_button.dart';
 import 'package:image_editor/widgets/relative_position_button.dart';
 import 'package:image_editor/widgets/rotation_button.dart';
+import 'package:image_editor/widgets/rotation_dialog.dart';
 import 'package:image_editor/widgets/shadow_button.dart';
+import 'package:image_editor/widgets/shadow_dialog.dart';
 import 'package:image_editor/widgets/spacing_button.dart';
+import 'package:image_editor/widgets/spacing_dialog.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
@@ -170,16 +176,16 @@ class _EditScreenState extends ConsumerState<EditScreen> {
         return FontSizeDialog(onClose: _closeDialog);
       case 'opacity':
         return OpacityDialog(onClose: _closeDialog);
-      // case 'rotation':
-      //   return RotationDialog(onClose: _closeDialog);
-      // case 'shadow':
-      //   return ShadowDialog(onClose: _closeDialog);
-      // case 'alignment':
-      //   return AlignmentDialog(onClose: _closeDialog);
-      // case 'spacing':
-      //   return SpacingDialog(onClose: _closeDialog);
-      // case 'lineSpacing':
-      //   return LineSpacingDialog(onClose: _closeDialog);
+      case 'rotation':
+        return RotationDialog(onClose: _closeDialog);
+      case 'shadow':
+        return ShadowDialog(onClose: _closeDialog);
+      case 'alignment':
+        return AlignmentDialog(onClose: _closeDialog);
+      case 'spacing':
+        return SpacingDialog(onClose: _closeDialog);
+      case 'lineSpacing':
+        return LineSpacingDialog(onClose: _closeDialog);
       // case 'position':
       //   return PositionDialog(onClose: _closeDialog);
       // case 'relativePosition':
@@ -229,115 +235,6 @@ class _EditScreenState extends ConsumerState<EditScreen> {
           ],
         );
       },
-    );
-  }
-}
-
-class OpacityDialog extends ConsumerStatefulWidget {
-  final VoidCallback onClose;
-
-  const OpacityDialog({super.key, required this.onClose});
-
-  @override
-  ConsumerState<OpacityDialog> createState() => _OpacityDialogState();
-}
-
-class _OpacityDialogState extends ConsumerState<OpacityDialog> {
-  double _opacity = 100.0; // Default opacity (100%)
-  double _initialOpacity = 100.0; // Store initial value
-
-  @override
-  void initState() {
-    super.initState();
-    // Get the current opacity from selected text if available
-    final selectedIndex = ref.read(selectedTextIndexProvider);
-    final texts = ref.read(textInfoControllerProvider);
-    if (selectedIndex != null && selectedIndex < texts.length) {
-      _opacity = texts[selectedIndex].opacity * 100;
-      _initialOpacity = _opacity;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Opacity',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '${_opacity.toInt()}%',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Slider(
-              value: _opacity,
-              min: 0,
-              max: 100,
-              divisions: 100,
-              onChanged: (value) {
-                setState(() {
-                  _opacity = value;
-                });
-                // Apply opacity change in real-time
-                final selectedIndex = ref.read(selectedTextIndexProvider);
-                if (selectedIndex != null) {
-                  ref
-                      .read(textInfoControllerProvider.notifier)
-                      .changeOpacity(value);
-                }
-              },
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: () {
-                    // Revert to initial value
-                    final selectedIndex = ref.read(selectedTextIndexProvider);
-                    if (selectedIndex != null) {
-                      ref
-                          .read(textInfoControllerProvider.notifier)
-                          .changeOpacity(_initialOpacity);
-                    }
-                    widget.onClose();
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.check, color: Colors.green),
-                  onPressed: () {
-                    // Changes already applied in real-time, just close
-                    widget.onClose();
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
