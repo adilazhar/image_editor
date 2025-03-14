@@ -21,7 +21,6 @@ class TextInfo extends Equatable {
   final Color backgroundColor;
   final EdgeInsets backgroundPadding;
   final double backgroundBorderRadius;
-  final String alignment; // For relative positioning: "topLeft", "center", etc.
 
   const TextInfo({
     required this.text,
@@ -43,7 +42,6 @@ class TextInfo extends Equatable {
     this.backgroundColor = Colors.white,
     this.backgroundPadding = const EdgeInsets.all(8.0),
     this.backgroundBorderRadius = 8.0,
-    this.alignment = 'topLeft',
   });
 
   TextInfo changeFontTo(double size) {
@@ -116,10 +114,6 @@ class TextInfo extends Equatable {
     );
   }
 
-  TextInfo changeRelativeAlignment(String alignment) {
-    return copyWith(alignment: alignment);
-  }
-
   TextInfo copyWith({
     String? text,
     double? fontSize,
@@ -163,7 +157,6 @@ class TextInfo extends Equatable {
       backgroundPadding: backgroundPadding ?? this.backgroundPadding,
       backgroundBorderRadius:
           backgroundBorderRadius ?? this.backgroundBorderRadius,
-      alignment: alignment ?? this.alignment,
     );
   }
 
@@ -194,6 +187,5 @@ class TextInfo extends Equatable {
         backgroundColor,
         backgroundPadding,
         backgroundBorderRadius,
-        alignment,
       ];
 }

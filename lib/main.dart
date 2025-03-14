@@ -7,6 +7,5 @@ void main() {
 }
 
 // TODO: When A New Text Is Added Make It Selected
-// TODO: fix the relative position dialog working
 // TODO: Fix the layout when the a dialog appears , the layout and the image should stay intact no matter which dilaog appears
 

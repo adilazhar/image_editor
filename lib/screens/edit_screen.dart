@@ -20,8 +20,6 @@ import 'package:image_editor/widgets/opacity_button.dart';
 import 'package:image_editor/widgets/opacity_dialog.dart';
 import 'package:image_editor/widgets/position_button.dart';
 import 'package:image_editor/widgets/position_dialog.dart';
-import 'package:image_editor/widgets/relative_position_button.dart';
-import 'package:image_editor/widgets/relative_position_dialog.dart';
 import 'package:image_editor/widgets/rotation_button.dart';
 import 'package:image_editor/widgets/rotation_dialog.dart';
 import 'package:image_editor/widgets/shadow_button.dart';
@@ -175,8 +173,6 @@ class _EditScreenState extends ConsumerState<EditScreen> {
                 const Gap(10),
                 PositionButton(isAnythingSelected, _showDialog),
                 const Gap(10),
-                RelativePositionButton(isAnythingSelected, _showDialog),
-                const Gap(10),
                 BackgroundButton(isAnythingSelected, _showDialog),
                 const Gap(10),
                 OutlinedButton(
@@ -248,8 +244,6 @@ class _EditScreenState extends ConsumerState<EditScreen> {
         return LineSpacingDialog(onClose: _closeDialog);
       case 'position':
         return PositionDialog(onClose: _closeDialog);
-      case 'relativePosition':
-        return RelativePositionDialog(onClose: _closeDialog);
       case 'background':
         return BackgroundDialog(onClose: _closeDialog);
       default:

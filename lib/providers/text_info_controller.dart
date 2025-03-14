@@ -177,19 +177,6 @@ class TextInfoController extends _$TextInfoController {
     }
   }
 
-  void changeRelativeAlignment(String alignment) {
-    final index = ref.read(selectedTextIndexProvider);
-    if (index != null) {
-      state = [
-        for (var i = 0; i < state.length; i++)
-          if (i == index)
-            state[i].changeRelativeAlignment(alignment)
-          else
-            state[i]
-      ];
-    }
-  }
-
   void moveTextByAmount(double amount, String direction) {
     final index = ref.read(selectedTextIndexProvider);
     if (index != null) {
