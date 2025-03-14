@@ -266,6 +266,8 @@ class _EditScreenState extends ConsumerState<EditScreen> {
           title: const Text('Add Text'),
           content: TextField(
             controller: textController,
+            minLines: 1,
+            maxLines: 3,
             decoration: const InputDecoration(
               hintText: 'Enter text',
             ),
@@ -283,7 +285,7 @@ class _EditScreenState extends ConsumerState<EditScreen> {
                 if (textController.text.isNotEmpty) {
                   ref
                       .read(textInfoControllerProvider.notifier)
-                      .addText(textController.text);
+                      .addText(textController.text.trim());
                   Navigator.of(context).pop();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

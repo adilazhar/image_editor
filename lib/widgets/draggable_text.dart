@@ -113,6 +113,7 @@ class DraggableTextState extends ConsumerState<DraggableText> {
                       height: 1 + (widget.textInfo.lineSpacing / 100),
                     ),
                     textAlign: widget.textInfo.textAlign,
+                    // textAlign: TextAlign.,
                   ),
                 ),
               ),
@@ -168,6 +169,8 @@ class DraggableTextState extends ConsumerState<DraggableText> {
           title: const Text('Update Text'),
           content: TextField(
             controller: textController,
+            minLines: 1,
+            maxLines: 3,
             decoration: const InputDecoration(
               hintText: 'Enter text',
             ),
@@ -185,7 +188,7 @@ class DraggableTextState extends ConsumerState<DraggableText> {
                 if (textController.text.isNotEmpty) {
                   widget.ref
                       .read(textInfoControllerProvider.notifier)
-                      .updateText(widget.index, textController.text);
+                      .updateText(widget.index, textController.text.trim());
                   Navigator.of(context).pop();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

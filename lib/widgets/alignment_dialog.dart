@@ -14,9 +14,7 @@ class AlignmentDialog extends ConsumerStatefulWidget {
 
 class _AlignmentDialogState extends ConsumerState<AlignmentDialog> {
   TextAlign _textAlign = TextAlign.left;
-  bool _justified = false;
   TextAlign _initialTextAlign = TextAlign.left;
-  bool _initialJustified = false;
 
   @override
   void initState() {
@@ -25,9 +23,9 @@ class _AlignmentDialogState extends ConsumerState<AlignmentDialog> {
     final texts = ref.read(textInfoControllerProvider);
     if (selectedIndex != null && selectedIndex < texts.length) {
       _textAlign = texts[selectedIndex].textAlign;
-      _justified = texts[selectedIndex].justified;
+      // _justified = texts[selectedIndex].justified;
       _initialTextAlign = _textAlign;
-      _initialJustified = _justified;
+      // _initialJustified = _justified;
     }
   }
 
@@ -77,9 +75,6 @@ class _AlignmentDialogState extends ConsumerState<AlignmentDialog> {
                           ref
                               .read(textInfoControllerProvider.notifier)
                               .changeTextAlignment(_initialTextAlign);
-                          ref
-                              .read(textInfoControllerProvider.notifier)
-                              .toggleJustified(_initialJustified);
                         }
                         widget.onClose();
                       },
@@ -123,29 +118,6 @@ class _AlignmentDialogState extends ConsumerState<AlignmentDialog> {
               },
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                const Text(
-                  'Justified:',
-                  style: TextStyle(fontSize: 12),
-                ),
-                const SizedBox(width: 8),
-                Switch(
-                  value: _justified,
-                  onChanged: (value) {
-                    setState(() {
-                      _justified = value;
-                    });
-                    final selectedIndex = ref.read(selectedTextIndexProvider);
-                    if (selectedIndex != null) {
-                      ref
-                          .read(textInfoControllerProvider.notifier)
-                          .toggleJustified(value);
-                    }
-                  },
-                ),
-              ],
-            ),
           ],
         ),
       ),

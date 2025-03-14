@@ -125,16 +125,6 @@ class TextInfoController extends _$TextInfoController {
     }
   }
 
-  void toggleJustified(bool value) {
-    final index = ref.read(selectedTextIndexProvider);
-    if (index != null) {
-      state = [
-        for (var i = 0; i < state.length; i++)
-          if (i == index) state[i].toggleJustified(value) else state[i]
-      ];
-    }
-  }
-
   void changeSpacing({
     double? letterSpacing,
     double? wordSpacing,

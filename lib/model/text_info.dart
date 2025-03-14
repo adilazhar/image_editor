@@ -14,7 +14,6 @@ class TextInfo extends Equatable {
   final double shadowBlurRadius;
   final Offset shadowOffset;
   final TextAlign textAlign;
-  final bool justified;
   final double letterSpacing;
   final double wordSpacing;
   final double lineSpacing;
@@ -37,7 +36,6 @@ class TextInfo extends Equatable {
     this.shadowBlurRadius = 5.0,
     this.shadowOffset = const Offset(2, 2),
     this.textAlign = TextAlign.left,
-    this.justified = false,
     this.letterSpacing = 0.0,
     this.wordSpacing = 0.0,
     this.lineSpacing = 0.0,
@@ -90,10 +88,6 @@ class TextInfo extends Equatable {
     return copyWith(textAlign: textAlign);
   }
 
-  TextInfo toggleJustified(bool value) {
-    return copyWith(justified: value);
-  }
-
   TextInfo changeSpacing({
     double? letterSpacing,
     double? wordSpacing,
@@ -139,7 +133,6 @@ class TextInfo extends Equatable {
     double? shadowBlurRadius,
     Offset? shadowOffset,
     TextAlign? textAlign,
-    bool? justified,
     double? letterSpacing,
     double? wordSpacing,
     double? lineSpacing,
@@ -162,7 +155,6 @@ class TextInfo extends Equatable {
       shadowBlurRadius: shadowBlurRadius ?? this.shadowBlurRadius,
       shadowOffset: shadowOffset ?? this.shadowOffset,
       textAlign: textAlign ?? this.textAlign,
-      justified: justified ?? this.justified,
       letterSpacing: letterSpacing ?? this.letterSpacing,
       wordSpacing: wordSpacing ?? this.wordSpacing,
       lineSpacing: lineSpacing ?? this.lineSpacing,
@@ -195,7 +187,6 @@ class TextInfo extends Equatable {
         shadowBlurRadius,
         shadowOffset,
         textAlign,
-        justified,
         letterSpacing,
         wordSpacing,
         lineSpacing,

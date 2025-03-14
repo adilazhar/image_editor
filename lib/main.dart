@@ -6,8 +6,7 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// TODO: Update the Textfield to support multiline text
-// TODO: Fix the text overlay when exporting 
 // TODO: When A New Text Is Added Make It Selected
-// TODO: MOdify the bg dialog color picker to open the color picker dialog instead
-// TODO: Add A back button for the home screen
+// TODO: fix the relative position dialog working
+// TODO: Fix the layout when the a dialog appears , the layout and the image should stay intact no matter which dilaog appears
+
