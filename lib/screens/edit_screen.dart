@@ -51,10 +51,37 @@ class _EditScreenState extends ConsumerState<EditScreen> {
     ref.read(selectedTextIndexProvider.notifier).clearSelection();
     final image = await _screenshotController.capture();
     if (image != null) {
-      await ImageGallerySaver.saveImage(image, quality: 100);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Image saved to gallery')),
-      );
+      if (Platform.isAndroid || Platform.isIOS) {
+        await ImageGallerySaver.saveImage(image, quality: 100);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image saved to gallery')),
+        );
+      } else if (Platform.isWindows) {
+        // Get the default Pictures directory
+        final directory = Directory(
+            '${Platform.environment['USERPROFILE']}\\Pictures\\Image Editor');
+
+        // Ensure the directory exists
+        if (!directory.existsSync()) {
+          directory.createSync(recursive: true);
+        }
+
+        // Create file path
+        final filePath =
+            '${directory.path}\\editing_${DateTime.now().millisecondsSinceEpoch}.png';
+
+        // Write image to file
+        File file = File(filePath);
+        await file.writeAsBytes(image);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Image saved to: $filePath'),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Saving not supported on this platform.'),
+        ));
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to capture image')),
