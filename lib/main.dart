@@ -6,6 +6,5 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// TODO: When A New Text Is Added Make It Selected
 // TODO: Fix the layout when the a dialog appears , the layout and the image should stay intact no matter which dilaog appears
 

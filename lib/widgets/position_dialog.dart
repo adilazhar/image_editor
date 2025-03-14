@@ -25,113 +25,115 @@ class _PositionDialogState extends ConsumerState<PositionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Move By: ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '${_positionStep.toInt()} px',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Expanded(
-                  child: Slider(
-                    value: _positionStep,
-                    min: 1,
-                    max: 20,
-                    divisions: 20,
-                    onChanged: (value) {
-                      setState(() {
-                        _positionStep = value;
-                      });
-                    },
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.check,
-                          color: Colors.green, size: 20),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints.tightFor(width: 24, height: 24),
-                      onPressed: widget.onClose,
+    return SingleChildScrollView(
+      child: Card(
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 8,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Move By: ',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                     ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.close, color: Colors.red, size: 20),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints.tightFor(width: 24, height: 24),
-                      onPressed: () {
+                  ),
+                  Text(
+                    '${_positionStep.toInt()} px',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Expanded(
+                    child: Slider(
+                      value: _positionStep,
+                      min: 1,
+                      max: 20,
+                      divisions: 20,
+                      onChanged: (value) {
                         setState(() {
-                          _positionStep = _initialPositionStep;
+                          _positionStep = value;
                         });
-                        widget.onClose();
                       },
                     ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(textInfoControllerProvider.notifier)
-                        .moveTextByAmount(_positionStep, 'left');
-                  },
-                  child: const Icon(Icons.arrow_back),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(textInfoControllerProvider.notifier)
-                        .moveTextByAmount(_positionStep, 'up');
-                  },
-                  child: const Icon(Icons.arrow_upward),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(textInfoControllerProvider.notifier)
-                        .moveTextByAmount(_positionStep, 'down');
-                  },
-                  child: const Icon(Icons.arrow_downward),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(textInfoControllerProvider.notifier)
-                        .moveTextByAmount(_positionStep, 'right');
-                  },
-                  child: const Icon(Icons.arrow_forward),
-                ),
-              ],
-            ),
-          ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.check,
+                            color: Colors.green, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                            width: 24, height: 24),
+                        onPressed: widget.onClose,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close,
+                            color: Colors.red, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                            width: 24, height: 24),
+                        onPressed: () {
+                          setState(() {
+                            _positionStep = _initialPositionStep;
+                          });
+                          widget.onClose();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(textInfoControllerProvider.notifier)
+                          .moveTextByAmount(_positionStep, 'left');
+                    },
+                    child: const Icon(Icons.arrow_back),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(textInfoControllerProvider.notifier)
+                          .moveTextByAmount(_positionStep, 'up');
+                    },
+                    child: const Icon(Icons.arrow_upward),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(textInfoControllerProvider.notifier)
+                          .moveTextByAmount(_positionStep, 'down');
+                    },
+                    child: const Icon(Icons.arrow_downward),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(textInfoControllerProvider.notifier)
+                          .moveTextByAmount(_positionStep, 'right');
+                    },
+                    child: const Icon(Icons.arrow_forward),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

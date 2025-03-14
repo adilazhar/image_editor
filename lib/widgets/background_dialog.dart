@@ -86,226 +86,228 @@ class _BackgroundDialogState extends ConsumerState<BackgroundDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Background',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Card(
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 8,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Background',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Switch(
+                    value: _hasBackground,
+                    onChanged: (value) {
+                      setState(() {
+                        _hasBackground = value;
+                      });
+                      _applyBackgroundChanges();
+                    },
+                  ),
+                  const Spacer(),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.check,
+                            color: Colors.green, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                            width: 24, height: 24),
+                        onPressed: () {
+                          _applyBackgroundChanges();
+                          widget.onClose();
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close,
+                            color: Colors.red, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                            width: 24, height: 24),
+                        onPressed: () {
+                          // Revert to initial values
+                          setState(() {
+                            _hasBackground = _initialHasBackground;
+                            _backgroundColor = _initialBackgroundColor;
+                            _leftPadding = _initialLeftPadding;
+                            _topPadding = _initialTopPadding;
+                            _rightPadding = _initialRightPadding;
+                            _bottomPadding = _initialBottomPadding;
+                            _borderRadius = _initialBorderRadius;
+                          });
+                          _applyBackgroundChanges();
+                          widget.onClose();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (_hasBackground) ...[
+                const SizedBox(height: 8),
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Pick a shadow color'),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              pickerColor: _backgroundColor,
+                              onColorChanged: (Color color) {
+                                setState(() {
+                                  _backgroundColor = color;
+                                });
+                                _applyBackgroundChanges();
+                              },
+                              pickerAreaHeightPercent: 0.8,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Done'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Color:',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: _backgroundColor,
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 16),
-                Switch(
-                  value: _hasBackground,
-                  onChanged: (value) {
-                    setState(() {
-                      _hasBackground = value;
-                    });
-                    _applyBackgroundChanges();
-                  },
+                // const Text(
+                //   'Color:',
+                //   style: TextStyle(
+                //     fontSize: 12,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
+                // const SizedBox(height: 4),
+                // Container(
+                //   height: 100,
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     border: Border.all(color: Colors.grey.shade300),
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: ColorPicker(
+                //     pickerColor: _backgroundColor,
+                //     onColorChanged: (color) {
+                //       setState(() {
+                //         _backgroundColor = color;
+                //       });
+                //       _applyBackgroundChanges();
+                //     },
+                //     paletteType: PaletteType.hsl,
+                //     pickerAreaHeightPercent: 0.8,
+                //     displayThumbColor: true,
+                //     enableAlpha: true,
+                //   ),
+                // ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Padding:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                const Spacer(),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.check,
-                          color: Colors.green, size: 20),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints.tightFor(width: 24, height: 24),
-                      onPressed: () {
-                        _applyBackgroundChanges();
-                        widget.onClose();
-                      },
-                    ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.close, color: Colors.red, size: 20),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints.tightFor(width: 24, height: 24),
-                      onPressed: () {
-                        // Revert to initial values
-                        setState(() {
-                          _hasBackground = _initialHasBackground;
-                          _backgroundColor = _initialBackgroundColor;
-                          _leftPadding = _initialLeftPadding;
-                          _topPadding = _initialTopPadding;
-                          _rightPadding = _initialRightPadding;
-                          _bottomPadding = _initialBottomPadding;
-                          _borderRadius = _initialBorderRadius;
-                        });
-                        _applyBackgroundChanges();
-                        widget.onClose();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            if (_hasBackground) ...[
-              const SizedBox(height: 8),
-              InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Pick a shadow color'),
-                        content: SingleChildScrollView(
-                          child: ColorPicker(
-                            pickerColor: _backgroundColor,
-                            onColorChanged: (Color color) {
-                              setState(() {
-                                _backgroundColor = color;
-                              });
-                              _applyBackgroundChanges();
-                            },
-                            pickerAreaHeightPercent: 0.8,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('Done'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
+                const SizedBox(height: 4),
+                _buildPaddingSlider('Left', _leftPadding, (value) {
+                  setState(() {
+                    _leftPadding = value;
+                  });
+                  _applyBackgroundChanges();
+                }),
+                _buildPaddingSlider('Top', _topPadding, (value) {
+                  setState(() {
+                    _topPadding = value;
+                  });
+                  _applyBackgroundChanges();
+                }),
+                _buildPaddingSlider('Right', _rightPadding, (value) {
+                  setState(() {
+                    _rightPadding = value;
+                  });
+                  _applyBackgroundChanges();
+                }),
+                _buildPaddingSlider('Bottom', _bottomPadding, (value) {
+                  setState(() {
+                    _bottomPadding = value;
+                  });
+                  _applyBackgroundChanges();
+                }),
+                const SizedBox(height: 8),
+                Row(
                   children: [
                     const Text(
-                      'Color:',
-                      style: TextStyle(fontSize: 12),
+                      'Border Radius: ',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: _backgroundColor,
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(4),
+                    Text(
+                      '${_borderRadius.toInt()} px',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: _borderRadius,
+                        min: 0,
+                        max: 100,
+                        divisions: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            _borderRadius = value;
+                          });
+                          _applyBackgroundChanges();
+                        },
                       ),
                     ),
                   ],
                 ),
-              ),
-              // const Text(
-              //   'Color:',
-              //   style: TextStyle(
-              //     fontSize: 12,
-              //     fontWeight: FontWeight.w500,
-              //   ),
-              // ),
-              // const SizedBox(height: 4),
-              // Container(
-              //   height: 100,
-              //   width: double.infinity,
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey.shade300),
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              //   child: ColorPicker(
-              //     pickerColor: _backgroundColor,
-              //     onColorChanged: (color) {
-              //       setState(() {
-              //         _backgroundColor = color;
-              //       });
-              //       _applyBackgroundChanges();
-              //     },
-              //     paletteType: PaletteType.hsl,
-              //     pickerAreaHeightPercent: 0.8,
-              //     displayThumbColor: true,
-              //     enableAlpha: true,
-              //   ),
-              // ),
-              const SizedBox(height: 8),
-              const Text(
-                'Padding:',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 4),
-              _buildPaddingSlider('Left', _leftPadding, (value) {
-                setState(() {
-                  _leftPadding = value;
-                });
-                _applyBackgroundChanges();
-              }),
-              _buildPaddingSlider('Top', _topPadding, (value) {
-                setState(() {
-                  _topPadding = value;
-                });
-                _applyBackgroundChanges();
-              }),
-              _buildPaddingSlider('Right', _rightPadding, (value) {
-                setState(() {
-                  _rightPadding = value;
-                });
-                _applyBackgroundChanges();
-              }),
-              _buildPaddingSlider('Bottom', _bottomPadding, (value) {
-                setState(() {
-                  _bottomPadding = value;
-                });
-                _applyBackgroundChanges();
-              }),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Text(
-                    'Border Radius: ',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '${_borderRadius.toInt()} px',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: _borderRadius,
-                      min: 0,
-                      max: 100,
-                      divisions: 100,
-                      onChanged: (value) {
-                        setState(() {
-                          _borderRadius = value;
-                        });
-                        _applyBackgroundChanges();
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

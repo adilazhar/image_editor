@@ -87,264 +87,266 @@ class _ShadowDialogState extends ConsumerState<ShadowDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+    return SingleChildScrollView(
+      child: Card(
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 8,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Shadow',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Switch(
+                        value: _hasShadow,
+                        onChanged: (value) {
+                          setState(() {
+                            _hasShadow = value;
+                          });
+                          ref
+                              .read(textInfoControllerProvider.notifier)
+                              .toggleShadow(value);
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.check,
+                            color: Colors.green, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                            width: 24, height: 24),
+                        onPressed: () {
+                          _applyShadowChanges();
+                          widget.onClose();
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close,
+                            color: Colors.red, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                            width: 24, height: 24),
+                        onPressed: () {
+                          _revertChanges();
+                          widget.onClose();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (_hasShadow) ...[
+                const SizedBox(height: 16),
+                // Shadow Color
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Pick a shadow color'),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              pickerColor: _shadowColor,
+                              onColorChanged: (Color color) {
+                                setState(() {
+                                  _shadowColor = color;
+                                });
+                                ref
+                                    .read(textInfoControllerProvider.notifier)
+                                    .changeShadowProperties(
+                                      shadowColor: color,
+                                    );
+                              },
+                              pickerAreaHeightPercent: 0.8,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Done'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Color:',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: _shadowColor,
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Shadow Opacity
                 Row(
                   children: [
                     const Text(
-                      'Shadow',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      'Opacity:',
+                      style: TextStyle(fontSize: 12),
                     ),
-                    const SizedBox(width: 16),
-                    Switch(
-                      value: _hasShadow,
-                      onChanged: (value) {
-                        setState(() {
-                          _hasShadow = value;
-                        });
-                        ref
-                            .read(textInfoControllerProvider.notifier)
-                            .toggleShadow(value);
-                      },
+                    const SizedBox(width: 8),
+                    Text(
+                      '${_shadowOpacity.toInt()}%',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: _shadowOpacity,
+                        min: 0,
+                        max: 100,
+                        divisions: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            _shadowOpacity = value;
+                          });
+                          ref
+                              .read(textInfoControllerProvider.notifier)
+                              .changeShadowProperties(
+                                shadowOpacity: value,
+                              );
+                        },
+                      ),
                     ),
                   ],
                 ),
+
+                // Shadow Blur Radius
                 Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.check,
-                          color: Colors.green, size: 20),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints.tightFor(width: 24, height: 24),
-                      onPressed: () {
-                        _applyShadowChanges();
-                        widget.onClose();
-                      },
+                    const Text(
+                      'Blur:',
+                      style: TextStyle(fontSize: 12),
                     ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.close, color: Colors.red, size: 20),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints.tightFor(width: 24, height: 24),
-                      onPressed: () {
-                        _revertChanges();
-                        widget.onClose();
-                      },
+                    const SizedBox(width: 8),
+                    Text(
+                      _shadowBlurRadius.toStringAsFixed(1),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: _shadowBlurRadius,
+                        min: 0,
+                        max: 50,
+                        divisions: 50,
+                        onChanged: (value) {
+                          setState(() {
+                            _shadowBlurRadius = value;
+                          });
+                          ref
+                              .read(textInfoControllerProvider.notifier)
+                              .changeShadowProperties(
+                                shadowBlurRadius: value,
+                              );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                // X Offset
+                Row(
+                  children: [
+                    const Text(
+                      'X Offset:',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _xOffset.toStringAsFixed(1),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: _xOffset,
+                        min: -140,
+                        max: 140,
+                        divisions: 280,
+                        onChanged: (value) {
+                          setState(() {
+                            _xOffset = value;
+                          });
+                          ref
+                              .read(textInfoControllerProvider.notifier)
+                              .changeShadowProperties(
+                                shadowOffset: Offset(value, _yOffset),
+                              );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Y Offset
+                Row(
+                  children: [
+                    const Text(
+                      'Y Offset:',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _yOffset.toStringAsFixed(1),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: _yOffset,
+                        min: -140,
+                        max: 140,
+                        divisions: 280,
+                        onChanged: (value) {
+                          setState(() {
+                            _yOffset = value;
+                          });
+                          ref
+                              .read(textInfoControllerProvider.notifier)
+                              .changeShadowProperties(
+                                shadowOffset: Offset(_xOffset, value),
+                              );
+                        },
+                      ),
                     ),
                   ],
                 ),
               ],
-            ),
-            if (_hasShadow) ...[
-              const SizedBox(height: 16),
-              // Shadow Color
-              InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Pick a shadow color'),
-                        content: SingleChildScrollView(
-                          child: ColorPicker(
-                            pickerColor: _shadowColor,
-                            onColorChanged: (Color color) {
-                              setState(() {
-                                _shadowColor = color;
-                              });
-                              ref
-                                  .read(textInfoControllerProvider.notifier)
-                                  .changeShadowProperties(
-                                    shadowColor: color,
-                                  );
-                            },
-                            pickerAreaHeightPercent: 0.8,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('Done'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  children: [
-                    const Text(
-                      'Color:',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: _shadowColor,
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Shadow Opacity
-              Row(
-                children: [
-                  const Text(
-                    'Opacity:',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${_shadowOpacity.toInt()}%',
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: _shadowOpacity,
-                      min: 0,
-                      max: 100,
-                      divisions: 100,
-                      onChanged: (value) {
-                        setState(() {
-                          _shadowOpacity = value;
-                        });
-                        ref
-                            .read(textInfoControllerProvider.notifier)
-                            .changeShadowProperties(
-                              shadowOpacity: value,
-                            );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // Shadow Blur Radius
-              Row(
-                children: [
-                  const Text(
-                    'Blur:',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    _shadowBlurRadius.toStringAsFixed(1),
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: _shadowBlurRadius,
-                      min: 0,
-                      max: 50,
-                      divisions: 50,
-                      onChanged: (value) {
-                        setState(() {
-                          _shadowBlurRadius = value;
-                        });
-                        ref
-                            .read(textInfoControllerProvider.notifier)
-                            .changeShadowProperties(
-                              shadowBlurRadius: value,
-                            );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // X Offset
-              Row(
-                children: [
-                  const Text(
-                    'X Offset:',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    _xOffset.toStringAsFixed(1),
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: _xOffset,
-                      min: -140,
-                      max: 140,
-                      divisions: 280,
-                      onChanged: (value) {
-                        setState(() {
-                          _xOffset = value;
-                        });
-                        ref
-                            .read(textInfoControllerProvider.notifier)
-                            .changeShadowProperties(
-                              shadowOffset: Offset(value, _yOffset),
-                            );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              // Y Offset
-              Row(
-                children: [
-                  const Text(
-                    'Y Offset:',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    _yOffset.toStringAsFixed(1),
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: _yOffset,
-                      min: -140,
-                      max: 140,
-                      divisions: 280,
-                      onChanged: (value) {
-                        setState(() {
-                          _yOffset = value;
-                        });
-                        ref
-                            .read(textInfoControllerProvider.notifier)
-                            .changeShadowProperties(
-                              shadowOffset: Offset(_xOffset, value),
-                            );
-                      },
-                    ),
-                  ),
-                ],
-              ),
             ],
-          ],
+          ),
         ),
       ),
     );

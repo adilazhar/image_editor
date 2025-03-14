@@ -137,85 +137,83 @@ class _EditScreenState extends ConsumerState<EditScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            height: 50,
-            child: Row(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(150),
+        child: Container(
+          height: 150,
+          color: Theme.of(context).appBarTheme.backgroundColor,
+          child: _activeDialog == null
+              ? Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlinedButton(
+                          onPressed: _goToHomeScreen,
+                          child: const Icon(Icons.arrow_back_rounded),
+                        ),
+                        const Gap(10),
+                        DeleteButton(isAnythingSelected),
+                        const Gap(10),
+                        EditButton(isAnythingSelected),
+                        const Gap(10),
+                        ColorButton(isAnythingSelected),
+                        const Gap(10),
+                        FontSizeButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        OpacityButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        RotationButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        ShadowButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        AlignmentButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        SpacingButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        LineSpacingButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        PositionButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        BackgroundButton(isAnythingSelected, _showDialog),
+                        const Gap(10),
+                        OutlinedButton(
+                          onPressed: _saveImageToGallery,
+                          child: const Icon(Icons.save),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : _buildDialogInAppBar(),
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          ref.read(selectedTextIndexProvider.notifier).clearSelection();
+          _closeDialog();
+        },
+        child: Center(
+          child: Screenshot(
+            controller: _screenshotController,
+            child: Stack(
               children: [
-                OutlinedButton(
-                  onPressed: _goToHomeScreen,
-                  child: const Icon(Icons.arrow_back_rounded),
-                ),
-                const Gap(10),
-                DeleteButton(isAnythingSelected),
-                const Gap(10),
-                EditButton(isAnythingSelected),
-                const Gap(10),
-                ColorButton(isAnythingSelected),
-                const Gap(10),
-                FontSizeButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                // New buttons for added features
-                OpacityButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                RotationButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                ShadowButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                AlignmentButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                SpacingButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                LineSpacingButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                PositionButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                BackgroundButton(isAnythingSelected, _showDialog),
-                const Gap(10),
-                OutlinedButton(
-                  onPressed: _saveImageToGallery,
-                  child: const Icon(Icons.save),
-                ),
+                Image.file(widget.image),
+                for (int i = 0; i < textList.length; i++)
+                  Positioned(
+                    left: textList[i].position.dx,
+                    top: textList[i].position.dy,
+                    child: DraggableText(
+                      textInfo: textList[i],
+                      index: i,
+                      ref: ref,
+                    ),
+                  )
               ],
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          if (_activeDialog != null) _buildDialogWidget(),
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                ref.read(selectedTextIndexProvider.notifier).clearSelection();
-                _closeDialog();
-              },
-              child: Center(
-                child: Screenshot(
-                  controller: _screenshotController,
-                  child: Stack(
-                    children: [
-                      Image.file(widget.image),
-                      for (int i = 0; i < textList.length; i++)
-                        Positioned(
-                          left: textList[i].position.dx,
-                          top: textList[i].position.dy,
-                          child: DraggableText(
-                            textInfo: textList[i],
-                            index: i,
-                            ref: ref,
-                          ),
-                        )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -226,7 +224,15 @@ class _EditScreenState extends ConsumerState<EditScreen> {
     );
   }
 
-  Widget _buildDialogWidget() {
+  Widget _buildDialogInAppBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      height: 150,
+      child: _buildDialogContent(),
+    );
+  }
+
+  Widget _buildDialogContent() {
     switch (_activeDialog) {
       case 'fontSize':
         return FontSizeDialog(onClose: _closeDialog);

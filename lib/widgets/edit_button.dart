@@ -29,6 +29,8 @@ class EditButton extends StatelessWidget {
                           title: const Text('Edit Text'),
                           content: TextField(
                             controller: textController,
+                            minLines: 1,
+                            maxLines: 3,
                             decoration: const InputDecoration(
                               hintText: 'Enter text',
                             ),
@@ -46,8 +48,8 @@ class EditButton extends StatelessWidget {
                                 if (textController.text.isNotEmpty) {
                                   ref
                                       .read(textInfoControllerProvider.notifier)
-                                      .updateText(
-                                          selectedIndex, textController.text);
+                                      .updateText(selectedIndex,
+                                          textController.text.trim());
                                   Navigator.of(context).pop();
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
