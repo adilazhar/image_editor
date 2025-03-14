@@ -10,3 +10,4 @@ void main() {
 // TODO: Fix the text overlay when exporting 
 // TODO: When A New Text Is Added Make It Selected
 // TODO: MOdify the bg dialog color picker to open the color picker dialog instead
+// TODO: Add A back button for the home screen

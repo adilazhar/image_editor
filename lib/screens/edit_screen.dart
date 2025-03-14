@@ -105,6 +105,31 @@ class _EditScreenState extends ConsumerState<EditScreen> {
     });
   }
 
+  void _goToHomeScreen() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Exit'),
+        content: const Text('Are you sure you want to exit?'),
+        actions: [
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              Navigator.of(context).pop(); // Exit to home screen
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final textList = ref.watch(textInfoControllerProvider);
@@ -122,6 +147,11 @@ class _EditScreenState extends ConsumerState<EditScreen> {
             height: 50,
             child: Row(
               children: [
+                OutlinedButton(
+                  onPressed: _goToHomeScreen,
+                  child: const Icon(Icons.arrow_back_rounded),
+                ),
+                const Gap(10),
                 DeleteButton(isAnythingSelected),
                 const Gap(10),
                 EditButton(isAnythingSelected),
