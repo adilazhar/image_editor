@@ -107,7 +107,7 @@ class _ShadowDialogState extends ConsumerState<ShadowDialog> {
                     const Text(
                       'Shadow',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

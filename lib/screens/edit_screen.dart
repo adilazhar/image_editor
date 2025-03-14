@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:image_editor/widgets/alignment_button.dart';
 import 'package:image_editor/widgets/alignment_dialog.dart';
 import 'package:image_editor/widgets/background_button.dart';
+import 'package:image_editor/widgets/background_dialog.dart';
 import 'package:image_editor/widgets/color_button.dart';
 import 'package:image_editor/widgets/delete_button.dart';
 import 'package:image_editor/widgets/draggable_text.dart';
@@ -18,7 +19,9 @@ import 'package:image_editor/widgets/line_spacing_dialog.dart';
 import 'package:image_editor/widgets/opacity_button.dart';
 import 'package:image_editor/widgets/opacity_dialog.dart';
 import 'package:image_editor/widgets/position_button.dart';
+import 'package:image_editor/widgets/position_dialog.dart';
 import 'package:image_editor/widgets/relative_position_button.dart';
+import 'package:image_editor/widgets/relative_position_dialog.dart';
 import 'package:image_editor/widgets/rotation_button.dart';
 import 'package:image_editor/widgets/rotation_dialog.dart';
 import 'package:image_editor/widgets/shadow_button.dart';
@@ -48,7 +51,7 @@ class _EditScreenState extends ConsumerState<EditScreen> {
     ref.read(selectedTextIndexProvider.notifier).clearSelection();
     final image = await _screenshotController.capture();
     if (image != null) {
-      await ImageGallerySaver.saveImage(image);
+      await ImageGallerySaver.saveImage(image, quality: 100);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Image saved to gallery')),
       );
@@ -186,12 +189,12 @@ class _EditScreenState extends ConsumerState<EditScreen> {
         return SpacingDialog(onClose: _closeDialog);
       case 'lineSpacing':
         return LineSpacingDialog(onClose: _closeDialog);
-      // case 'position':
-      //   return PositionDialog(onClose: _closeDialog);
-      // case 'relativePosition':
-      //   return RelativePositionDialog(onClose: _closeDialog);
-      // case 'background':
-      //   return BackgroundDialog(onClose: _closeDialog);
+      case 'position':
+        return PositionDialog(onClose: _closeDialog);
+      case 'relativePosition':
+        return RelativePositionDialog(onClose: _closeDialog);
+      case 'background':
+        return BackgroundDialog(onClose: _closeDialog);
       default:
         return const SizedBox.shrink();
     }

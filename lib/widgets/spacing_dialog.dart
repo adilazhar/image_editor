@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_editor/providers/selected_text_index.dart';
 import 'package:image_editor/providers/text_info_controller.dart';
-import 'package:image_editor/screens/edit_screen.dart';
 
 class SpacingDialog extends ConsumerStatefulWidget {
   final VoidCallback onClose;
@@ -171,5 +170,11 @@ class _SpacingDialogState extends ConsumerState<SpacingDialog> {
         ),
       ),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1)}";
   }
 }

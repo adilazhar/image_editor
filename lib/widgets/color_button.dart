@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_editor/providers/selected_text_color.dart';
 import 'package:image_editor/providers/text_info_controller.dart';
 
 class ColorButton extends StatelessWidget {
@@ -22,7 +23,7 @@ class ColorButton extends StatelessWidget {
                         title: const Text('Select Color'),
                         content: SingleChildScrollView(
                           child: ColorPicker(
-                            pickerColor: Colors.black,
+                            pickerColor: ref.read(selectedTextColorProvider),
                             onColorChanged: (color) {
                               ref
                                   .read(textInfoControllerProvider.notifier)
