@@ -1,16 +1,48 @@
-# image_editor
+# Flutter Image Editor
 
-A Simple and Minimal Image Editing App
+## Overview
 
-## Getting Started
+An image editor built with Flutter (without plugins) that allows users to add text to images with extensive customization options including color, size, rotation, shadows, alignment, spacing, and background styling.
 
-This project is a starting point for a Flutter application.
+## Demo
 
-A few resources to get you started if this is your first Flutter project:
+[Add your demo video here]
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The Flutter Image Editor supports adding text on images with the following customization options:
+
+- **Text Styling**
+  - Change text color
+  - Adjust text size
+  - Control opacity
+  - Rotate text
+- **Shadow Effects**
+  - Customize shadow color
+  - Adjust shadow opacity
+  - Set blur radius
+  - Configure X and Y offsets
+- **Text Layout**
+  - Text alignment (left, center, right)
+  - Word spacing adjustment
+  - Letter spacing control
+  - Line spacing customization
+  - Precise text positioning with pixel movement
+- **Text Background**
+  - Background color options
+  - Customizable border radius
+  - LTRB (Left, Top, Right, Bottom) padding control
+
+## Tech Stack
+
+- Flutter (v3.4.0+)
+- Dart
+- State Management: Riverpod
+
+## Challenges & Solutions
+
+### Managing Complex State
+
+With so many customizable options, state management became complex quickly.
+
+**Solution:** I leveraged Riverpod to create a well-structured state management system with separate providers for different aspects of text styling. This made the codebase more maintainable and easier to extend with new features.
