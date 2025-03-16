@@ -6,7 +6,7 @@ An image editor built with Flutter (without plugins) that allows users to add te
 
 ## Demo
 
-[Add your demo video here]
+https://github.com/user-attachments/assets/8e390b96-8d07-445b-a47d-f751be22148e
 
 ## Features
 
